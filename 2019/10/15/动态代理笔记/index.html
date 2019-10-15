@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>学习计划 | Lee</title>
+  <title>动态代理 | Lee</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#现在要学习的Vue的学习#以后要学习的SpringBoot FX SSH Python JAVA基础#已经学习的MVC Spring Mybatis 框架 SSM">
+  <meta name="description" content="1、基于子类的动态代理public class Client { public static void main(String[] args) {     final Producer producer = new Producer();     /**      * 动态代理      * 特点 字节码随用随创建，随用随加载      * 作用 不修改源码的基础上对方法增强      * 分类">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习计划">
-<meta property="og:url" content="http://yoursite.com/2019/10/11/我的第一篇文章/index.html">
+<meta property="og:title" content="动态代理">
+<meta property="og:url" content="http://yoursite.com/2019/10/15/动态代理笔记/index.html">
 <meta property="og:site_name" content="Lee">
-<meta property="og:description" content="#现在要学习的Vue的学习#以后要学习的SpringBoot FX SSH Python JAVA基础#已经学习的MVC Spring Mybatis 框架 SSM">
+<meta property="og:description" content="1、基于子类的动态代理public class Client { public static void main(String[] args) {     final Producer producer = new Producer();     /**      * 动态代理      * 特点 字节码随用随创建，随用随加载      * 作用 不修改源码的基础上对方法增强      * 分类">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-11T09:52:00.010Z">
+<meta property="og:updated_time" content="2019-10-15T11:45:39.307Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="学习计划">
-<meta name="twitter:description" content="#现在要学习的Vue的学习#以后要学习的SpringBoot FX SSH Python JAVA基础#已经学习的MVC Spring Mybatis 框架 SSM">
+<meta name="twitter:title" content="动态代理">
+<meta name="twitter:description" content="1、基于子类的动态代理public class Client { public static void main(String[] args) {     final Producer producer = new Producer();     /**      * 动态代理      * 特点 字节码随用随创建，随用随加载      * 作用 不修改源码的基础上对方法增强      * 分类">
   
     <link rel="alternative" href="/atom.xml" title="Lee" type="application/atom+xml">
   
@@ -158,28 +158,180 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-我的第一篇文章" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-动态代理笔记" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      学习计划
+      动态代理
     </h1>
   
 
         
-        <a href="/2019/10/11/我的第一篇文章/" class="archive-article-date">
-  	<time datetime="2019-10-11T15:28:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-11</time>
+        <a href="/2019/10/15/动态代理笔记/" class="archive-article-date">
+  	<time datetime="2019-10-15T11:05:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#现在要学习的<br><strong>Vue</strong>的学习<br>#以后要学习的<br><strong>SpringBoot FX SSH Python JAVA基础</strong><br>#已经学习的<br><strong>MVC Spring Mybatis 框架 SSM</strong></p>
+        <hr>
+<h2 id="1、基于子类的动态代理"><a href="#1、基于子类的动态代理" class="headerlink" title="1、基于子类的动态代理"></a>1、基于子类的动态代理</h2><pre><code>public class Client {
+public static void main(String[] args) {
+    final Producer producer = new Producer();
+    /**
+     * 动态代理
+     * 特点 字节码随用随创建，随用随加载
+     * 作用 不修改源码的基础上对方法增强
+     * 分类
+     * 基于接口的动态代理
+     * 基于子类的动态代理:
+     *    涉及的类：Enhancer
+     *    提供者：cglib库
+     *    如何创建对象：
+     *    使用Enhancer中create方法
+     * 创建代理对象的要求：被代理类不能是最终类
+     * create方法的参数：
+     * Class:字节码
+     *   它是用于被代理对象的字节码
+     *   Callback:用于增强的代码（官方说法为回调函数）
+     *   一般写该接口的子接口：MethodInterceptor
+     */
+   Producer cgligProducer =(Producer) Enhancer.create(producer.getClass(), new MethodInterceptor() {
+       /**
+        * 执行任何对象的任何方法都会经过该方法
+        * @param proxy
+        * @param method
+        * @param args
+        * 以上三个参数和基于接口的动态代理中invoke方法的参数是一样的
+        * @param proxy
+        * @return
+        * @throws Throwable
+        */
+       public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+           Object returnValue = null;
+           Float money =(Float)args[0];
+           if(&quot;saleProduct&quot;.equals(method.getName())) {
+               return method.invoke(producer, money*0.8f);
+           }
+           return returnValue;
+       }
+   });
+   cgligProducer.saleProduct(12000f);
+}
+}</code></pre><hr>
+<pre><code>public class Producer implements IProducer{
 
+/**
+ * 销售
+ * @param money
+ */
+public void saleProduct(float money){
+    System.out.println(&quot;拿到钱销售产品：&quot;+money);
+}
+
+/**
+ * 售后
+ * @param money
+ */
+public void afterService(float money){
+    System.out.println(&quot;提供售后服务并拿到钱&quot;+money);
+}
+}</code></pre><h2 id="2、基于接口的动态代理"><a href="#2、基于接口的动态代理" class="headerlink" title="2、基于接口的动态代理"></a>2、基于接口的动态代理</h2><pre><code>/**
+  * 对生产厂家的要求的接口
+  */
+ public interface IProducer {
+/**
+ * 销售
+ * @param money
+ */
+public void saleProduct(float money);
+
+/**
+ * 售后
+ * @param money
+ */
+public void afterService(float money);
+  }</code></pre><hr>
+<pre><code>/**
+ * @program: day03_pro02
+ * @description:
+ * @author: LeeXy
+ * @create: 2019-09-02 22:33
+ **/
+public class Producer implements IProducer{
+/**
+ * 销售
+ * @param money
+ */
+public void saleProduct(float money){
+    System.out.println(&quot;拿到钱销售产品：&quot;+money);
+}
+
+/**
+ * 售后
+ * @param money
+ */
+public void afterService(float money){
+    System.out.println(&quot;提供售后服务并拿到钱&quot;+money);
+}
+}</code></pre><hr>
+<pre><code>public class Client {
+public static void main(String[] args) {
+    final Producer producer = new Producer();
+    /**
+     * 动态代理
+     * 特点 字节码随用随创建，随用随加载
+     * 作用 不修改源码的基础上对方法增强
+     * 分类
+     * 基于接口的动态代理
+     * 基于子类的动态代理
+     * 基于接口的动态代理：
+     * 涉及的类：proxy
+     * 提供者：JDK官方
+     * 如何创建代理对象
+     * 使用proxy类中newProxyInstance
+     * 创建代理对象的要求：最少实现一个接口，如果没有则不能使用
+     * newProxyInstance方法的参数
+     *ClassLoader类加载器
+     * 用于加载代理  对象字节码，和被代理对象使用相同的加载器固定写法
+     *Class[] 用于使代理对象拥有被代理对象一样的方法
+     * Invocationhandler
+     * 用于提供增强的方法（官方说法为回调函数）
+     * 它是让我们写如何代理。我们一般都是写该接口的实现类，通常情况下都是匿名内部类
+     * 不是必须的
+     * 此接口的实现类都是谁用谁写
+     */
+
+   IProducer proxyProducer= (IProducer)Proxy.newProxyInstance(producer.getClass().getClassLoader(),
+
+           producer.getClass().getInterfaces(), new InvocationHandler() {
+               /**执行被代理对象的任何接口都会经过该方法
+                *方法参数的含义
+                * @param proxy 代理参数的应用
+                * @param method 当前执行的方法
+                * @param args   当前的方法所执行的参数
+                * @return   和被代理
+                * @throws Throwable
+                */
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    Object returnValue = null;
+                    //returnValue 获取代理对象
+                    Float money =(Float)args[0];
+                    if(&quot;saleProduct&quot;.equals(method.getName())) {
+                        return method.invoke(producer, money*0.8f);
+                     //获取到对象中的方法 并对方法中的参数进行操作 0.8后的f不能省略否则会报错
+                    }
+                    return returnValue;
+                }
+            });
+   proxyProducer.saleProduct(10000f);
+}
+
+}</code></pre>
       
 
       
@@ -258,7 +410,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/11/我的第一篇文章/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/15/动态代理笔记/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -272,18 +424,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/10/15/动态代理笔记/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          动态代理
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/10/07/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2019/10/11/我的第一篇文章/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">学习计划</div>
       <i class="icon-circle-right"></i>
     </a>
   

@@ -159,28 +159,108 @@
     <article id="post-Spring-Boot" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/21/Spring-Boot/">动态代理</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/21/Spring-Boot/" class="archive-article-date">
+  	<time datetime="2019-12-21T09:21:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-21</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>2019/12/21 17:21:52 </p>
-<h3 id="Spring-Boot项目创建"><a href="#Spring-Boot项目创建" class="headerlink" title="Spring Boot项目创建"></a>Spring Boot项目创建</h3><hr>
+        <hr>
+<h3 id="一、Spring-Boot项目创建"><a href="#一、Spring-Boot项目创建" class="headerlink" title="一、Spring Boot项目创建"></a>一、Spring Boot项目创建</h3><hr>
+<h2 id="Hello-World探究"><a href="#Hello-World探究" class="headerlink" title="Hello World探究"></a>Hello World探究</h2><h3 id="1、POM文件"><a href="#1、POM文件" class="headerlink" title="1、POM文件"></a>1、POM文件</h3><h4 id="1、父项目"><a href="#1、父项目" class="headerlink" title="1、父项目"></a>1、父项目</h4><pre><code>&lt;parent&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+&lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+&lt;/parent&gt;</code></pre><p>他的父项目是</p>
+<pre><code>&lt;parent&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-dependencies&lt;/artifactId&gt;
+&lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+&lt;relativePath&gt;../../spring-boot-dependencies&lt;/relativePath&gt;
+&lt;/parent&gt;</code></pre><p>他来真正管理Spring Boot应用里面的所有依赖版本；</p>
+<p>Spring Boot的版本仲裁中心；</p>
+<p>以后我们导入依赖默认是不需要写版本；（没有在dependencies里面管理的依赖自然需要声明版本号）</p>
+<h4 id="2、启动器"><a href="#2、启动器" class="headerlink" title="2、启动器"></a>2、启动器</h4><pre><code>&lt;dependency&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre><p><strong>spring-boot-starter</strong>-==web==：</p>
+<p>​    spring-boot-starter：spring-boot场景启动器；帮我们导入了web模块正常运行所依赖的组件；</p>
+<p>Spring Boot将所有的功能场景都抽取出来，做成一个个的starters（启动器），只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来。要用什么功能就导入什么场景的启动器</p>
 <p>Spring Boot默认jar包使用嵌入式tomcat，默认不支持JSP页面（但是可以使用模板引擎free marker、thymelefe）。</p>
-<pre><code> package com.springboot01helloworldquick;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"> package com.springboot01helloworldquick;</span><br><span class="line"></span><br><span class="line"> import org.springframework.boot.SpringApplication;</span><br><span class="line"> import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"></span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class SpringBoot01HelloworldQuickApplication &#123;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">SpringApplication.run(SpringBoot01HelloworldQuickApplication.class, args);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
- import org.springframework.boot.SpringApplication;
- import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class SpringBoot01HelloworldQuickApplication {
-
-public static void main(String[] args) {
-SpringApplication.run(SpringBoot01HelloworldQuickApplication.class, args);
-}
-}</code></pre><p>所以我们不需要配置服务器，直接启用main函数，通过浏览器访问。</p>
+<p>所以我们不需要配置服务器，直接启用main函数，通过浏览器访问。</p>
+<p>在Spring Boot中我们可以将一个项目打包成一个jar包（maven选项中Lifecycle中的package），将打包好的jar包用java -jar+名字可以运行</p>
 <h3 id="resource文件夹中目录结构"><a href="#resource文件夹中目录结构" class="headerlink" title="resource文件夹中目录结构"></a>resource文件夹中目录结构</h3><ul>
 <li>static：保存所有静态资源：js css img;</li>
 <li>templates:保存所有的模板引擎</li>
 <li>application.properties:Spring Boot应用配置文件；可以修改一些默认设置例如端口号等等。</li>
 </ul>
+<h3 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2.配置文件"></a>2.配置文件</h3><hr>
+<p>1.配置文件</p>
+<hr>
+<p>Spring Boot使用一个全局的配置文件，配置文件名是固定的；</p>
+<ul>
+<li>application.properties</li>
+<li>application.yml</li>
+</ul>
+<p>配置文件的作用：修改Spring Boot自动配置的的默认值；</p>
+<p>SpringBoot在底层都给我们自动配置好；</p>
+<h2 id="2、YAML语法："><a href="#2、YAML语法：" class="headerlink" title="2、YAML语法："></a>2、YAML语法：</h2><h3 id="1、基本语法"><a href="#1、基本语法" class="headerlink" title="1、基本语法"></a>1、基本语法</h3><p>k:(空格)v：表示一对键值对（空格必须有）；</p>
+<p>以<strong>空格</strong>的缩进来控制层级关系；只要是左对齐的一列数据，都是同一个层级的</p>
+<pre><code>server:
+    port: 8081
+    path: /hello</code></pre><p>属性和值也是大小写敏感；</p>
+<h3 id="2、值的写法"><a href="#2、值的写法" class="headerlink" title="2、值的写法"></a>2、值的写法</h3><h4 id="字面量：普通的值（数字，字符串，布尔）"><a href="#字面量：普通的值（数字，字符串，布尔）" class="headerlink" title="字面量：普通的值（数字，字符串，布尔）"></a>字面量：普通的值（数字，字符串，布尔）</h4><p>​    k: v：字面直接来写；</p>
+<p>​        字符串默认不用加上单引号或者双引号；</p>
+<p>​        “”：双引号；不会转义字符串里面的特殊字符；特殊字符会作为本身想表示的意思</p>
+<p>​                name:   “zhangsan \n lisi”：输出；zhangsan 换行  lisi</p>
+<p>​        ‘’：单引号；会转义特殊字符，特殊字符最终只是一个普通的字符串数据</p>
+<p>​                name:   ‘zhangsan \n lisi’：输出；zhangsan \n  lisi</p>
+<h4 id="对象、Map（属性和值）（键值对）："><a href="#对象、Map（属性和值）（键值对）：" class="headerlink" title="对象、Map（属性和值）（键值对）："></a>对象、Map（属性和值）（键值对）：</h4><p>​    k: v：在下一行来写对象的属性和值的关系；注意缩进</p>
+<p>​        对象还是k: v的方式</p>
+<pre><code>friends:
+        lastName: zhangsan
+        age: 20</code></pre><p>行内写法：</p>
+<pre><code>friends: {lastName: zhangsan,age: 18}</code></pre><h4 id="数组（List、Set）："><a href="#数组（List、Set）：" class="headerlink" title="数组（List、Set）："></a>数组（List、Set）：</h4><p>用- 值表示数组中的一个元素</p>
+<pre><code>pets:
+ - cat
+ - dog
+ - pig</code></pre><p>行内写法</p>
+<pre><code>pets: [cat,dog,pig]</code></pre><h2 id="3、配置文件值注入"><a href="#3、配置文件值注入" class="headerlink" title="3、配置文件值注入"></a>3、配置文件值注入</h2><p>配置文件</p>
+<pre><code>person:
+lastName: hello
+age: 18
+boss: false
+birth: 2017/12/12
+maps: {k1: v1,k2: 12}
+lists:
+  - lisi
+  - zhaoliu
+dog:
+  name: 小狗
+  age: 12</code></pre><p>javaBean：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 将配置文件中配置的每一个属性的值，映射到这个组件中</span><br><span class="line">* @ConfigurationProperties：告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定；</span><br><span class="line">*  prefix = &quot;person&quot;：配置文件中哪个下面的所有属性进行一一映射</span><br><span class="line">*</span><br><span class="line">* 只有这个组件是容器中的组件，才能容器提供的@ConfigurationProperties功能；</span><br><span class="line">*</span><br><span class="line">*/ </span><br><span class="line">  @Component</span><br><span class="line">  @ConfigurationProperties(prefix = &quot;person&quot;)</span><br><span class="line">  public class Person &#123;</span><br><span class="line">  	</span><br><span class="line">  private String lastName;</span><br><span class="line">  private Integer age;</span><br><span class="line">  private Boolean boss;</span><br><span class="line">  private Date birth;</span><br><span class="line">  	</span><br><span class="line">  private Map&lt;String,Objectmaps;</span><br><span class="line">  private List&lt;Objectlists;</span><br><span class="line">  private Dog dog;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以导入配置文件处理器，以后编写配置就有提示了</p>
+<pre><code>&lt;!--导入配置文件处理器，配置文件进行绑定就会有提示--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
+            &lt;optional&gt;true&lt;/optional&gt;
+        &lt;/dependency&gt;</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 将配置文件中配置的每一个属性的值，映射到这个组件中</span><br><span class="line">* @ConfigurationProperties：告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定；</span><br><span class="line">*  prefix = &quot;person&quot;：配置文件中哪个下面的所有属性进行一一映射</span><br><span class="line">*</span><br><span class="line">* 只有这个组件是容器中的组件，才能容器提供的@ConfigurationProperties功能；</span><br><span class="line">*</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+
 
       
 

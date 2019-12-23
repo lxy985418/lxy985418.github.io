@@ -156,6 +156,73 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Spring-Boot" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>2019/12/21 17:21:52 </p>
+<h2 id="Spring-Boot项目创建"><a href="#Spring-Boot项目创建" class="headerlink" title="###Spring Boot项目创建"></a>###Spring Boot项目创建</h2><p>Spring Boot默认jar包使用嵌入式tomcat，默认不支持JSP页面（但是可以使用模板引擎free marker、thymelefe）。</p>
+<pre><code> package com.springboot01helloworldquick;
+
+ import org.springframework.boot.SpringApplication;
+ import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringBoot01HelloworldQuickApplication {
+
+public static void main(String[] args) {
+SpringApplication.run(SpringBoot01HelloworldQuickApplication.class, args);
+}
+}</code></pre><p>所以我们不需要配置服务器，直接启用main函数，通过浏览器访问。</p>
+<p>###resource文件夹中目录结构###</p>
+<ul>
+<li>static：保存所有静态资源：js css img;</li>
+<li>templates:保存所有的模板引擎</li>
+<li>application.properties:Spring Boot应用配置文件；可以修改一些默认设置例如端口号等等。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/21/Spring-Boot/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-动态代理笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
